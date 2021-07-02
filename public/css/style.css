@@ -1,0 +1,59 @@
+.borders {
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+}
+
+.border-top{
+    border-top: 1px solid lightgray;
+}
+
+.subCat{
+    margin: 2px;
+}
+
+.confirmation{
+    max-width: 500px;
+}
+
+.confirmation-button{
+    text-decoration: none;
+
+}
+
+.categories{
+    margin-bottom: 15px;
+}
+
+.btn-delete{
+    padding: 2px;
+    text-decoration: none;
+    border: 1px solid black;
+}
+
+.product{
+    margin: 15px 5px;
+    width: 18rem
+}
+
+.categories{
+    margin: 15px;
+    width: 12rem
+}
+.logo{
+    text-decoration: none;
+    color: #2d3748;
+    display: inline-block;
+}
+
+.paginate{
+    text-decoration: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.log-out{
+    float: right;
+}
