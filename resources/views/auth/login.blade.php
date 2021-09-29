@@ -50,6 +50,10 @@
                 <x-button class="ml-3">
                     {{ __('Log in') }}
                 </x-button>
+
+                   <div class="flex items-center justify-end mt-4">
+                        <a class="btn-success" href="{{route('google')}}" >login with google</a>
+                   </div>
             </div>
         </form>
     </x-auth-card>

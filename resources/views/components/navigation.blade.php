@@ -15,5 +15,8 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{route('cart')}}">Корзина</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('user')}}">Мои данные</a>
+            </li>
         </ul>
 </nav>

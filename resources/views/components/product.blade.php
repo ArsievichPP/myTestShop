@@ -13,7 +13,7 @@
                 <label>
                     Осталось на складе: {{$product->quantity}}<br>
                     <input type="hidden" name="id" value="{{$product->id}}">
-                    <input type="number" name="quantity" value="1" required>
+                    <input type="number" name="quantity" value="1" min="1" max="{{$product->quantity}}" required>
                     <button type="submit">Добавить в корзину</button>
                 </label>
 

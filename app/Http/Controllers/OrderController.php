@@ -24,7 +24,7 @@ class OrderController extends Controller
 //        DB::transaction(function () use ($request) { //todo Не смог придумать как получить id покупателя и заказа (так как пока транзакция не завешится, этих данных нет в бд)
 
         $orderId = Order::query()->insertGetId([  // todo мне кажется с таблицей customers было лучше, так как теперь заказать товар может только
-                                                  // todo зарегистрированны пользователь и только на сое имя и адресс
+                                                  // todo зарегистрированны пользователь и только на свое имя и адресс
             'customer_id' => Auth::id(),
             'delivery' => $request->delivery
         ]);
