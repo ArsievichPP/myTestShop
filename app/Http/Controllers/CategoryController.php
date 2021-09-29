@@ -17,18 +17,6 @@ class CategoryController extends Controller
         return view('categories', ['categories' => $categories]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int|null $id
-     * @return Application|Factory|View
-     */
-//    public function show(int $id)
-//    {
-//        $category = Category::query()->with('subcategories.products')->find($id); // todo работает только если нужно достать товар первой подкатегории но не глубже
-//        return view('categories', ['categories' => $category]);
-//    }
-
     public function show($id)
     {
         $category = Category::query()->find($id);
