@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\ShoppingList;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -17,21 +22,37 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|Response
+     * @return Application|Factory|View
      */
     public function store(Request $request)
     {
-//        DB::transaction(function () use ($request) { //todo Не смог придумать как получить id покупателя и заказа (так как пока транзакция не завешится, этих данных нет в бд)
+        DB::transaction(function () use ($request) {
+            $idAndQuantity = session()->get('idAndQuantity');
+            $total_price = 0;
+            $shoppingLists = [];
 
-        $orderId = Order::query()->insertGetId([  // todo мне кажется с таблицей customers было лучше, так как теперь заказать товар может только
-                                                  // todo зарегистрированны пользователь и только на свое имя и адресс
-            'customer_id' => Auth::id(),
-            'delivery' => $request->delivery
-        ]);
+            foreach ($idAndQuantity as $id => $quantity) {
+                $product = Product::query()->lockForUpdate()->find($id);
 
-        $shoppingList = new ShoppingList();
-        $shoppingList->create($orderId);
-//         });
+                $shoppingLists[] = new ShoppingList([
+                    'product_id' => $id,
+                    'quantity' => $quantity,
+                    'unit_price' => $product->value('price'),
+                ]);
+
+                $total_price += $product->value('price') * $quantity;
+                $product->decrement('quantity', $quantity);
+            }
+            $order = Order::query()->create([
+                'customer_id' => Auth::id(),
+                'delivery' => $request->delivery,
+                'total_price' => $total_price,
+            ]);
+
+            $order->shoppingLists()->saveMany($shoppingLists);
+
+            session()->forget('idAndQuantity');
+        });
 
         return view('confirmation');
     }
@@ -49,5 +70,4 @@ class OrderController extends Controller
         session()->put('idAndQuantity', $idAndQuantity);
         return back()->withInput();
     }
-
 }

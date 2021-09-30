@@ -9,6 +9,16 @@ class ShoppingList extends Model
 {
     use HasFactory;
 
+    protected $fillable =
+        [
+            'order_id',
+            'product_id',
+            'quantity',
+            'unit_price',
+        ];
+
+    public $timestamps = false;
+
     public function order()
     {
         $this->hasOne(Order::class);
@@ -17,17 +27,5 @@ class ShoppingList extends Model
     public function product()
     {
         $this->hasOne(Product::class);
-    }
-
-    public function create($orderId): bool
-    {
-        $idAndQuantity = session()->get('idAndQuantity');
-        foreach ($idAndQuantity as $id => $quantity) {
-            if (!$this->query()->insert(['order_id' => $orderId, 'product_id' => $id, 'quantity' => $quantity])) {
-                return false;
-            }
-        }
-        session()->forget('idAndQuantity');
-        return true;
     }
 }
