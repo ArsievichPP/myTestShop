@@ -15,8 +15,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{route('cart')}}">Корзина</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('user')}}">Мои данные</a>
+            <li>
+                <div class="dropdown">
+                    <button class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{\Illuminate\Support\Facades\Auth::user()->name}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="{{route('user')}}">Мои данные</a></li>
+                        <li><a class="dropdown-item" href="{{route('orders')}}">Мои заказы</a></li>
+                    </ul>
+                </div>
             </li>
         </ul>
 </nav>

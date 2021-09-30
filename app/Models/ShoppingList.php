@@ -21,11 +21,11 @@ class ShoppingList extends Model
 
     public function order()
     {
-        $this->hasOne(Order::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function product()
     {
-        $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 }

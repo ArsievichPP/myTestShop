@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/cart', [CartController::class, 'index'])->name('cart'); // список товаров в корзине
 
     Route::post('/order', [OrderController::class, 'store'])->name('order'); // оформить заказ
-
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/user', [UserController::class, 'index'])->name('user');
 });
 

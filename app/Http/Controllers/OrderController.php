@@ -19,6 +19,20 @@ class OrderController extends Controller
 {
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return Application|Factory|View
+     */
+    public function index()
+    {
+        $orders = Order::query()->
+        with('shoppingLists.product')->
+        where('customer_id', Auth::user()->getAuthIdentifier())->
+        get();
+        return view('orders', ['orders' => $orders]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -33,11 +47,10 @@ class OrderController extends Controller
 
             foreach ($idAndQuantity as $id => $quantity) {
                 $product = Product::query()->lockForUpdate()->find($id);
-
                 $shoppingLists[] = new ShoppingList([
                     'product_id' => $id,
                     'quantity' => $quantity,
-                    'unit_price' => $product->value('price'),
+                    'unit_price' => $product->price,
                 ]);
 
                 $total_price += $product->value('price') * $quantity;

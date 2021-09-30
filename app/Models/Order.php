@@ -44,9 +44,9 @@ class Order extends Model
         return $this->hasOne(DeliveryMethod::class);
     }
 
-    public function customer(): HasOne
+    public function customer(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'id', 'customer_id');
     }
 
     public function assignStatusAwaitingPayment(){

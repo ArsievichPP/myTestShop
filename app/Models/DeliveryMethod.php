@@ -10,8 +10,8 @@ class DeliveryMethod extends Model
 {
     use HasFactory;
 
-    public function order(): HasMany
+    public function order(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsTo(Order::class);
     }
 }
