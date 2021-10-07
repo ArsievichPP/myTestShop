@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusColumnInOrdersTable extends Migration
+class CreatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddStatusColumnInOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('status')->default('new');
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id();
+            $table->string('method');
+            $table->string('payment_id')->nullable();
+            $table->string('paid_status')->default('Pending');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddStatusColumnInOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        Schema::dropIfExists('payments');
     }
 }

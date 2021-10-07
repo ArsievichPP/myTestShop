@@ -22,7 +22,7 @@ return [
     |
     | This value determines the "environment" your application is currently
     | running in. This may determine how you prefer to configure various
-    | services the application utilizes. Set this in your ".env" file.
+    | Services the application utilizes. Set this in your ".env" file.
     |
     */
 
@@ -129,7 +129,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | The service providers listed here will be automatically loaded on the
-    | request to your application. Feel free to add your own services to
+    | request to your application. Feel free to add your own Services to
     | this array to grant expanded functionality to your applications.
     |
     */
@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        \Sebdesign\SM\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -222,6 +223,7 @@ return [
         'Route' => Illuminate\Support\Facades\Route::class,
         'Schema' => Illuminate\Support\Facades\Schema::class,
         'Session' => Illuminate\Support\Facades\Session::class,
+        'StateMachine' => \Sebdesign\SM\Facade::class,
         'Storage' => Illuminate\Support\Facades\Storage::class,
         'Str' => Illuminate\Support\Str::class,
         'URL' => Illuminate\Support\Facades\URL::class,

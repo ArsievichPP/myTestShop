@@ -45,7 +45,7 @@
             </tr>
             </thead>
         </table>
-        <h4>Сумма заказа: {{$sumPrice}}$</h4>
+        <h4 id="sumPrice">Сумма заказа: {{$sumPrice}}$</h4>
     @else
         <h4> Корзина пуста!!!</h4>
     @endisset

@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 
+use App\DTO\OrderRequestDTO;
+use App\DTO\PaymentRequestDTO;
 use App\Models\Order;
-use App\Models\Product;
-use App\Models\ShoppingList;
+use App\Services\OrderService;
+use App\Services\PaymentService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use StateMachine;
 
 class OrderController extends Controller
 {
@@ -28,6 +30,7 @@ class OrderController extends Controller
         $orders = Order::query()->
         with('shoppingLists.product')->
         where('customer_id', Auth::user()->getAuthIdentifier())->
+        orderByDesc('id')->
         get();
         return view('orders', ['orders' => $orders]);
     }
@@ -37,37 +40,30 @@ class OrderController extends Controller
      *
      * @param Request $request
      * @return Application|Factory|View
+     * @throws UnknownProperties
      */
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            $idAndQuantity = session()->get('idAndQuantity');
-            $total_price = 0;
-            $shoppingLists = [];
+        $orderService = new OrderService();
+        $order = $orderService->createOrder(new OrderRequestDTO($request->all()));
 
-            foreach ($idAndQuantity as $id => $quantity) {
-                $product = Product::query()->lockForUpdate()->find($id);
-                $shoppingLists[] = new ShoppingList([
-                    'product_id' => $id,
-                    'quantity' => $quantity,
-                    'unit_price' => $product->price,
-                ]);
-
-                $total_price += $product->value('price') * $quantity;
-                $product->decrement('quantity', $quantity);
-            }
-            $order = Order::query()->create([
-                'customer_id' => Auth::id(),
-                'delivery' => $request->delivery,
-                'total_price' => $total_price,
-            ]);
-
-            $order->shoppingLists()->saveMany($shoppingLists);
-
-            session()->forget('idAndQuantity');
-        });
+        $payment = new PaymentService();
+        $payment->createPayment($order);
+        $payment->stripePayment(new PaymentRequestDTO($request->all()), $order);
 
         return view('confirmation');
+    }
+
+    public function refund($order_id)
+    {
+        /** @var Order $order */
+        $order = Order::query()->with('payment')->find($order_id);
+        if (Auth::user()->getAuthIdentifier() === $order->customer_id)
+        {
+            $service = new PaymentService();
+            $service->stripeRefund($order);
+        }
+        return back();
     }
 
     /**
@@ -76,7 +72,8 @@ class OrderController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function update(Request $request): RedirectResponse
+    public
+    function update(Request $request): RedirectResponse
     {
         $idAndQuantity = $request->session()->pull('idAndQuantity');
         $idAndQuantity[$request->id] = $request->quantity;

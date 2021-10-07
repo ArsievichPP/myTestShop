@@ -21,9 +21,9 @@
                         </tr>
                         </tbody>
                     </table>
-                    <h5>К оплате {{$order->total_price}}$</h5>
                 </div>
                 @endforeach
+                    <h5>К оплате {{$order->total_price}}$</h5>
             </div>
         </div>
         @endforeach
