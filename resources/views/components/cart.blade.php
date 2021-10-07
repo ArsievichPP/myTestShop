@@ -11,7 +11,9 @@
                     <td>{{$quantity[$product->id]}}</td>
                     <td>{{$product->price}}$</td>
                     <td>{{$product->price * $quantity[$product->id]}}$</td>
-                    <td><button class="btn-danger btn-delete" id="deleteProduct{{$product->id}}">Удалить</button></td>
+                    <td>
+                        <button class="btn btn-danger btn-delete" id="deleteProduct{{$product->id}}">Удалить</button>
+                    </td>
                 </tr>
                 <script>
                     $(document).ready(function () {
@@ -45,10 +47,22 @@
             </tr>
             </thead>
         </table>
-        <h4 id="sumPrice">Сумма заказа: {{$sumPrice}}$</h4>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-xl-6">
+                    <h4 id="sumPrice">Сумма заказа: {{$sumPrice}}$</h4>
+                </div>
+                <div class="col-md-4 col-xl-3 justify-content-end">
+                    <form method="post" action="{{route('order.create')}}">
+                        @csrf
+                        <button class="btn btn-success" type="submit">Создать заказ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     @else
         <h4> Корзина пуста!!!</h4>
     @endisset
-
-
 </div>

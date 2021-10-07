@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\DTO\OrderRequestDTO;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +12,11 @@ use StateMachine;
 
 class OrderService extends Service
 {
-    public function createOrder(OrderRequestDTO $request)
+    public function createOrder()
     {
-
         $order = null;
 
-        DB::transaction(function () use ($request, &$order) {
+        DB::transaction(function () use (&$order) {
             $idAndQuantity = session()->get('idAndQuantity');
             $total_price = 0;
             $shoppingLists = [];
@@ -33,9 +32,9 @@ class OrderService extends Service
                 $total_price += $product->price * $quantity;
                 $product->decrement('quantity', $quantity);
             }
+
             $order = Order::query()->create([
                 'customer_id' => Auth::id(),
-                'delivery' => $request->delivery,
                 'total_price' => $total_price,
             ])->fresh();
 

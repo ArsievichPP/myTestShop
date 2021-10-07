@@ -6,8 +6,9 @@
 
 @section('navigation')
     @include('components/navigation')
+    @include('components/breadcrumbs')
 @endsection
 
 @section('content')
-    @include('components/cart')
+    @include('components/checkout')
 @endsection

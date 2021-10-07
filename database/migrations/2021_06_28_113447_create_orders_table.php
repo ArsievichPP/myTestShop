@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('users')->onDelete('restrict');
-            $table->unsignedBigInteger('delivery');
+            $table->unsignedBigInteger('delivery')->nullable();
             $table->foreign('delivery')->references('id')->on('delivery_methods')->onDelete('restrict');
         });
     }

@@ -11,16 +11,15 @@ use StateMachine;
 class PaymentService extends Service
 {
     public function createPayment(Order $order){
-        $payment = Payment::query()->create([
-            'method' => 'Stripe',
-        ])->fresh();
-
+        $payment = Payment::query()->create()->fresh();
         $order->payment_id = $payment->id;
         $order->save();
     }
 
     public function stripePayment(PaymentRequestDTO $request, Order $order)
     {
+        $payment = $order->payment;
+
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $response = Stripe\Charge::create([
             "amount" => $order->total_price * 100,
@@ -36,10 +35,12 @@ class PaymentService extends Service
             "receipt_email" => $request->email,
         ]);
 
-        $payment = $order->payment;
-
         $payment->payment_id = $response->id;
+        $payment->method = 'Stripe';
         $payment->save();
+
+        $order->delivery = $request->delivery;
+        $order->save();
 
         $paymentState = StateMachine::get($payment, 'payments');
         if ($paymentState->apply('pay', false, ['response' => $response])) {

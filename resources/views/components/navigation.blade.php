@@ -1,10 +1,5 @@
     <nav class="container" >
     <a href="{{route('main')}}" class="logo"><h1>Test-Shop.ua</h1> </a>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button class="log-out" type="submit">Выйти из аккаунта</button>
-        </form>
-
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" href="{{route('main')}}">Все товары</a>
@@ -23,6 +18,12 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="{{route('user')}}">Мои данные</a></li>
                         <li><a class="dropdown-item" href="{{route('orders')}}">Мои заказы</a></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button class="log-out btn dropdown-item" type="submit">Выйти из аккаунта</button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </li>

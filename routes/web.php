@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
@@ -31,11 +32,13 @@ Route::middleware(['auth'])->group(function(){
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('destroyFromCart'); // удалить из корзины
     Route::get('/cart', [CartController::class, 'index'])->name('cart'); // список товаров в корзине
 
-    Route::post('/order', [OrderController::class, 'store'])->name('order'); // оформить заказ
+    Route::post('/order', [OrderController::class, 'store'])->name('order.create'); // оформить заказ
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/user', [UserController::class, 'index'])->name('user');
 
-    Route::get('/orders/refund/{id}', [OrderController::class, 'refund'])->name('refund');
+    Route::get('/payment/{order_id}', [PaymentController::class, 'show'])->name('payment.show');
+    Route::post('/payment/{order_id}', [PaymentController::class, 'pay'])->name('pay');
+    Route::get('/payment/refund/{order_id}', [PaymentController::class, 'refund'])->name('refund');
 });
 
 

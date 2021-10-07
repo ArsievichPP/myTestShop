@@ -54,11 +54,13 @@
                 <x-button class="ml-3">
                     {{ __('Log in') }}
                 </x-button>
-
-                <x-button class="ml-3">
-                    <a class="btn-success" href="{{route('google')}}">Google</a>
-                </x-button>
             </div>
         </form>
+
+        <div class="flex items-center justify-end mt-4">
+            <x-button class="ml-3">
+                <a class="btn-success" href="{{route('google')}}">Google</a>
+            </x-button>
+        </div>
     </x-auth-card>
 </x-guest-layout>

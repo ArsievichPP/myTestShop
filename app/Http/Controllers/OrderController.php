@@ -45,25 +45,9 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $orderService = new OrderService();
-        $order = $orderService->createOrder(new OrderRequestDTO($request->all()));
-
-        $payment = new PaymentService();
-        $payment->createPayment($order);
-        $payment->stripePayment(new PaymentRequestDTO($request->all()), $order);
+        $orderService->createOrder();
 
         return view('confirmation');
-    }
-
-    public function refund($order_id)
-    {
-        /** @var Order $order */
-        $order = Order::query()->with('payment')->find($order_id);
-        if (Auth::user()->getAuthIdentifier() === $order->customer_id)
-        {
-            $service = new PaymentService();
-            $service->stripeRefund($order);
-        }
-        return back();
     }
 
     /**

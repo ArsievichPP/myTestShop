@@ -15,4 +15,6 @@ class PaymentRequestDTO extends DataTransferObject
     public $address;
 
     public $email;
+
+    public $delivery;
 }

@@ -12,4 +12,6 @@ class UserController extends Controller
         $user = Arr::only($user, ['name', 'email', 'phone', 'address']);
         return view('user', ['user' => $user]);
     }
+
+
 }
